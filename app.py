@@ -53,7 +53,7 @@ def search_phonebook():
     phonenumber = request.args.get("phoneNumber")
 
     if not any([first_name, last_name, state, phonenumber]):
-        return jsonify({"error": "At least one of the three fields must be filled."}), 400
+        return jsonify({"error": "At least one of the four fields must be filled."}), 400
 
     search_results = search_phone_book(
         first_name=first_name, 
