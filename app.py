@@ -18,6 +18,7 @@ def search_phone_book(**kwargs):
     search_first_name = kwargs.get("first_name")
     search_last_name = kwargs.get("last_name")
     search_state = kwargs.get("state")
+    search_offset = kwargs.get("offset")
 
     if not any([search_first_name, search_last_name, search_state]):
         return []
@@ -37,6 +38,9 @@ def search_phone_book(**kwargs):
 
     query += " AND ".join(query_arguments) 
 
+    if search_offset:
+        query += f" LIMIT {search_offset}, 10"
+
     db.row_factory = dictionary_factory
 
     return list(db.execute(query))
@@ -46,6 +50,7 @@ def search_phonebook():
     first_name = request.args.get("firstName")
     last_name = request.args.get("lastName")
     state = request.args.get("state")
+    offset = request.args.get("offset")
 
     if not any([first_name, last_name, state]):
         return jsonify({"error": "At least one of the three fields must be filled."}), 400
@@ -53,7 +58,8 @@ def search_phonebook():
     search_results = search_phone_book(
         first_name=first_name, 
         last_name=last_name, 
-        state=state
+        state=state,
+        offset=offset
     )
 
     return jsonify(search_results)
