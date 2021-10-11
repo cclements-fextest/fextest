@@ -36,6 +36,7 @@ def search_phone_book(**kwargs):
         query_arguments.append(f"state='{search_state}'")
 
     query += " AND ".join(query_arguments) 
+    query += " collate nocase"
 
     db.row_factory = dictionary_factory
 
